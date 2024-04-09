@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTC to In-hand Converter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+        
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        
+        h4 {
+            color: #333;
+            text-align: center;
+        }
+        
+        .input-field label {
+            color: #333;
+        }
+        
+       
+        
+        .btn {
+            background-color: #009688;
+            border: none;
+            color: #fff;
+            padding: 12px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #00796b;
+        }
+        
+        .result-container {
+            margin-top: 30px;
+            border-top: 2px solid #009688;
+            padding-top: 20px;
+        }
+        
+        .result-label {
+            color: #666;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .result-value {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h4>CTC to In-hand Converter</h4>
+    <div class="row">
+        <form class="col s12">
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="ctc" type="number" class="validate" step="0.01" min="0" placeholder="1000000" oninput="calculate()">
+                    <label for="ctc">CTC (₹)</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="bonusPercentage" type="number" class="validate" step="0.01" min="0" max="100" placeholder="12" oninput="calculate()">
+                    <label for="bonusPercentage">Bonus Included in CTC (%)</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="monthlyTax" type="number" class="validate" step="0.01" min="0" placeholder="2200" oninput="calculate()">
+                    <label for="monthlyTax">Monthly Professional Tax (₹)</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="employerPF" type="number" class="validate" step="0.01" min="0" placeholder="200" oninput="calculate()">
+                    <label for="employerPF">Monthly Employer PF (₹)</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="employeePF" type="number" class="validate" step="0.01" min="0" placeholder="0" oninput="calculate()">
+                    <label for="employeePF">Monthly Employee PF (₹)</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="additionalDeduction1" type="number" class="validate" step="0.01" min="0" placeholder="0" oninput="calculate()">
+                    <label for="additionalDeduction1">Monthly Additional Deduction 1 (Optional) (₹)</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="additionalDeduction2" type="number" class="validate" step="0.01" min="0" placeholder="0" oninput="calculate()">
+                    <label for="additionalDeduction2">Monthly Additional Deduction 2 (Optional) (₹)</label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            <h5>Calculated Results:</h5>
+            <p>Total Monthly Deductions: <span id="totalMonthlyDeductions">0</span> ₹</p>
+            <p>Total Annual Deductions: <span id="totalAnnualDeductions">0</span> ₹</p>
+            <p>Take Home Monthly Salary: <span id="takeHomeMonthlySalary">0</span> ₹</p>
+            <p>Take Home Annual Salary: <span id="takeHomeAnnualSalary">0</span> ₹</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+    function calculate() {
+        var ctc = parseFloat(document.getElementById('ctc').value) || 0;
+        var bonusPercentage = parseFloat(document.getElementById('bonusPercentage').value) || 0;
+        var monthlyTax = parseFloat(document.getElementById('monthlyTax').value) || 0;
+        var employerPF = parseFloat(document.getElementById('employerPF').value) || 0;
+        var employeePF = parseFloat(document.getElementById('employeePF').value) || 0;
+        var additionalDeduction1 = parseFloat(document.getElementById('additionalDeduction1').value) || 0;
+        var additionalDeduction2 = parseFloat(document.getElementById('additionalDeduction2').value) || 0;
+
+        var totalDeductions = monthlyTax + employerPF + employeePF + additionalDeduction1 + additionalDeduction2;
+        var annualDeductions = totalDeductions * 12;
+
+        var takeHomeMonthlySalary = ctc / 12 - totalDeductions - (ctc * bonusPercentage / 100) / 12;
+        var takeHomeAnnualSalary = takeHomeMonthlySalary * 12;
+
+        document.getElementById('totalMonthlyDeductions').textContent = totalDeductions.toFixed(2);
+        document.getElementById('totalAnnualDeductions').textContent = annualDeductions.toFixed(2);
+        document.getElementById('takeHomeMonthlySalary').textContent = takeHomeMonthlySalary.toFixed(2);
+        document.getElementById('takeHomeAnnualSalary').textContent = takeHomeAnnualSalary.toFixed(2);
+    }
+</script>
+
+</body>
+</html>
